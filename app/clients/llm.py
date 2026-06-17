@@ -16,7 +16,7 @@ async def generate(prompt: str) -> str:
 def _generate_openai(prompt: str) -> str:
     if not settings.openai_api_key:
         raise ValueError("OPENAI_API_KEY is required for OpenAI LLM")
-    client = OpenAI(api_key=settings.openai_api_key)
+    client = OpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url)
     response = client.chat.completions.create(
         model=settings.llm_model,
         temperature=0,

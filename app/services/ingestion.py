@@ -15,7 +15,7 @@ from app.utils.hashing import content_hash
 logger = logging.getLogger(__name__)
 
 def _metadata_db_path() -> Path:
-    return Path(settings.chroma_persist_dir).parent / "metadata.db"
+    return Path(settings.chroma_persist_dir) / "metadata.db"
 
 
 def _get_metadata_conn() -> sqlite3.Connection:

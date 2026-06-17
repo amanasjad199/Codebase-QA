@@ -25,7 +25,7 @@ async def embed_texts(texts: list[str]) -> tuple[list[list[float]], int]:
 async def _embed_openai(texts: list[str]) -> tuple[list[list[float]], int]:
     if not settings.openai_api_key:
         raise ValueError("OPENAI_API_KEY is required for OpenAI embeddings")
-    client = OpenAI(api_key=settings.openai_api_key)
+    client = OpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url)
     batch_size = 100
     all_embeddings = []
     total_tokens = 0
@@ -43,3 +43,10 @@ def _embed_local(texts: list[str]) -> tuple[list[list[float]], int]:
     embeddings = [list(map(float, v)) for v in vectors]
     estimated_tokens = sum(max(1, len(t.split())) for t in texts)
     return embeddings, estimated_tokens
+
+
+def get_actual_dimension() -> int:
+    if settings.embedding_model == "local":
+        model = _get_local_model()
+        return model.get_sentence_embedding_dimension()
+    return settings.embedding_dimensions

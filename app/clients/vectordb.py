@@ -3,8 +3,10 @@ from pathlib import Path
 from typing import Any
 
 import chromadb
+from chromadb.errors import ChromaError
 
 from app.config import settings
+from app.services.embedding import get_actual_dimension
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +21,17 @@ class VectorDBClient:
         return self._client.get_or_create_collection(name=collection)
 
     def upsert(self, ids: list[str], embeddings: list[list[float]], documents: list[str], metadatas: list[dict[str, Any]], collection: str = "documents") -> None:
-        col = self._get_or_create_collection(collection)
-        col.upsert(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
+        try:
+            col = self._get_or_create_collection(collection)
+            col.upsert(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
+        except Exception as exc:
+            if "dimension" in str(exc).lower():
+                logger.warning("Dimension mismatch, recreating collection %s", collection)
+                self._client.delete_collection(collection)
+                col = self._client.create_collection(name=collection)
+                col.upsert(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
+            else:
+                raise
 
     async def search(self, query_vector: list[float], n_results: int = 5, collection: str = "documents") -> dict:
         col = self._get_or_create_collection(collection)

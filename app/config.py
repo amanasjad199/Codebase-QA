@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     app_name: str = "RAG API"
 
     openai_api_key: str = ""
+    openai_base_url: str = "https://api.openai.com/v1"
     embedding_model: str = "openai"
     local_embedding_model: str = "all-MiniLM-L6-v2"
     embedding_dimensions: int = 1536
