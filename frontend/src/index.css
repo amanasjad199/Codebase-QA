@@ -1,0 +1,186 @@
+/* ============================================================
+   CodebaseQA — design tokens & base
+   Aesthetic: a calm, precise "instrument panel" for engineers.
+   Signature: the retrieval signal/confidence meter.
+   ============================================================ */
+
+:root {
+  /* dark is the default theme */
+  --bg: #0b0e14;
+  --bg-grad-1: #0d1119;
+  --bg-grad-2: #0a0c12;
+  --surface: #141925;
+  --surface-2: #1a2030;
+  --surface-3: #20283a;
+  --border: #28324a;
+  --border-soft: #1f2738;
+  --text: #e7ebf4;
+  --text-muted: #93a0ba;
+  --text-faint: #66738d;
+
+  /* brand: phosphor jade — the "match / high-confidence / signal" color */
+  --accent: #3fb6a8;
+  --accent-strong: #54d3c4;
+  --accent-dim: rgba(63, 182, 168, 0.14);
+  --accent-line: rgba(63, 182, 168, 0.4);
+
+  /* highlight: honey amber — "the relevant passage" marker */
+  --amber: #e8b339;
+  --amber-dim: rgba(232, 179, 57, 0.14);
+
+  /* confidence semantics (high == brand jade on purpose) */
+  --c-high: #3fb6a8;
+  --c-high-bg: rgba(63, 182, 168, 0.13);
+  --c-mid: #e8b339;
+  --c-mid-bg: rgba(232, 179, 57, 0.13);
+  --c-low: #f0758a;
+  --c-low-bg: rgba(240, 117, 138, 0.13);
+
+  --danger: #f0758a;
+  --danger-bg: rgba(240, 117, 138, 0.12);
+
+  --code-bg: #0e1320;
+  --code-border: #20283a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --maxw: 1360px;
+  --rail-left: 300px;
+  --rail-right: 340px;
+
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --bg: #f6f7f5;
+  --bg-grad-1: #f4f6f3;
+  --bg-grad-2: #eef1ec;
+  --surface: #ffffff;
+  --surface-2: #f3f5f1;
+  --surface-3: #e9ece6;
+  --border: #dde1d9;
+  --border-soft: #e7eae3;
+  --text: #161b22;
+  --text-muted: #586173;
+  --text-faint: #8b94a5;
+
+  --accent: #18867a;
+  --accent-strong: #0f6f64;
+  --accent-dim: rgba(24, 134, 122, 0.1);
+  --accent-line: rgba(24, 134, 122, 0.32);
+
+  --amber: #b8821a;
+  --amber-dim: rgba(184, 130, 26, 0.12);
+
+  --c-high: #18867a;
+  --c-high-bg: rgba(24, 134, 122, 0.1);
+  --c-mid: #b8821a;
+  --c-mid-bg: rgba(184, 130, 26, 0.12);
+  --c-low: #cc4d63;
+  --c-low-bg: rgba(204, 77, 99, 0.1);
+
+  --danger: #cc4d63;
+  --danger-bg: rgba(204, 77, 99, 0.08);
+
+  --code-bg: #f3f5f1;
+  --code-border: #e1e5dc;
+
+  --shadow-sm: 0 1px 2px rgba(20, 30, 20, 0.06);
+  --shadow-md: 0 8px 28px rgba(20, 30, 20, 0.08);
+  --shadow-lg: 0 24px 64px rgba(20, 30, 20, 0.12);
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, var(--bg-grad-1), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, var(--bg-grad-2), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--accent-dim);
+}
+
+/* focus visibility — part of the quality floor */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--text-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,45 @@
+# Render blueprint for the CodebaseQA backend.
+# Deploy: push to GitHub -> Render -> New -> Blueprint -> select this repo.
+# Then set OPENAI_API_KEY in the dashboard (it is sync:false, i.e. a secret).
+services:
+  - type: web
+    name: codebaseqa-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # Free instances cold-start (~30s) and have an ephemeral disk.
+    # Use "starter" for an always-on instance during judging.
+    plan: starter
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # ---- Secret: paste your key in the Render dashboard ----
+      - key: OPENAI_API_KEY
+        sync: false
+      # ---- Recommended working config: real OpenAI for embeddings + LLM ----
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: EMBEDDING_MODEL
+        value: openai
+      - key: LLM_PROVIDER
+        value: openai
+      - key: LLM_MODEL
+        value: gpt-4o
+      # ---- Vector store ----
+      - key: VECTOR_DB_PROVIDER
+        value: chroma
+      - key: CHROMA_PERSIST_DIR
+        value: /app/data/chroma_db
+      - key: CHUNK_SIZE
+        value: "1000"
+      - key: CHUNK_OVERLAP
+        value: "200"
+      - key: TOP_K
+        value: "5"
+      - key: LOG_LEVEL
+        value: INFO
+    # Persist ChromaDB + metadata across restarts/redeploys so pre-ingested
+    # demo documents survive (free tier has no persistent disk).
+    disk:
+      name: chroma-data
+      mountPath: /app/data
+      sizeGB: 1

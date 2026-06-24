@@ -1,0 +1,18 @@
+# Keep the backend image lean — exclude frontend, data, tests, caches.
+frontend/
+data/
+tests/
+specs/
+.git/
+.github/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+.env
+.env.*
+*.log
+.DS_Store
+README.md
